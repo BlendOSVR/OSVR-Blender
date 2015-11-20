@@ -1,4 +1,5 @@
 import mathutils
+import math
 
 class Math:
     def ConvertPosition(OSVR.ClientKit.Vec3 vec)
@@ -13,7 +14,12 @@ class Math:
         return mathutils.Quaternion((float)quat.w, (float)quat.x, (float)quat.y, (float)quat.z)
 
     def ConvertPose(OSVR.ClientKit.Pose3 pose)
-        return Matrix4x4.TRS(Math.ConvertPosition(pose.translation), Math.ConvertOrientation(pose.rotation), Vector3.zero);
+        matrix4x4 = mathutils.Matrix()
+        matrix_location = mathutils.Matrix.Translation(ConvertPosition(pose.translation))
+        matrix_rotation = mathutils.Matrix.Rotation(ConvertOrientation(pose.rotation))
+        matrix_scale = mathutils.Matrix.Scale(ConvertPosition(Vector3.zero))
+        matrix4x4 = matrix_location * matrix_rotation * matrix_scale
+        return matrix4x4
 
     #Convert OSVR.ClientKit.Viewport to Rect. Blender equivalent?
     #Rect ConvertViewport(OSVR.ClientKit.Viewport viewport)
