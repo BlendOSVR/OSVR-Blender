@@ -17,10 +17,12 @@ class Math:
         return mathutils.Quaternion((float)quat.w, (float)quat.x, (float)quat.y, (float)quat.z)
 
     def ConvertPose(OSVR.ClientKit.Pose3 pose):
-        matrix4x4 = mathutils.Matrix()
-        matrix_location = mathutils.Matrix.Translation(ConvertPosition(pose.translation))
-        matrix_rotation = mathutils.Matrix.Rotation(ConvertOrientation(pose.rotation))
-        matrix_scale = mathutils.Matrix.Scale(ConvertPosition(Vector3.zero))
+        matrix_location = mathutils.Matrix.Translation(ConvertPosition(pose.translation)).to_4x4()
+        #rotation parameters are angle (float), size (int), axis (string or vector)
+        axis, angle = ConvertOrientation(pose.rotation).to_axis_angle()
+        matrix_rotation = mathutils.Matrix.Rotation(angle, 4, axis).to_4x4()
+        #scale parameters are factor (float), size (int), axis (string or vector)
+        matrix_scale = mathutils.Matrix.Scale(ConvertPosition(Vector3.zero)).to_4x4()
         matrix4x4 = matrix_location * matrix_rotation * matrix_scale
         return matrix4x4
 
