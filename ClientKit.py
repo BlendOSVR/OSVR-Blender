@@ -1,11 +1,12 @@
 import bge
 
-class ClientKit:
+class ClientKit(bge.type.KX_GameObject):
 
-    def __init__(self):
+    def __init__(self, gameObjectToBeReplaced):
         self._instance = None
         self._context = None
         self.AppID = ""
+        ensureStarted()
 
     def instance():
         doc = "The instance property."
@@ -32,13 +33,20 @@ class ClientKit:
         return locals()
     context = property(**context())
 
-    def EnsureStarted():
+    def ensureStarted():
         if self._context is None:
-            if len(AppID) == 0:
+            if len(self.AppID) == 0:
                 #OSVR ClientKit instance needs AppID set to a reverse-order DNS name! Using dummy name...
-                AppID = "com.osvr.osvr-blender.dummy"
-            #[OSVR] Starting with app ID: " + AppID
-            self._context = new OSVR.ClientKit.ClientContext(AppID, 0);
+                self.AppID = "com.osvr.osvr-blender.dummy"
+            print("[OSVR] Starting with app ID: " + self.AppID)
+            self._context = new OSVR.ClientKit.ClientContext(self.AppID, 0);
 
-        if not _context.CheckStatus():
+        if not self._context.CheckStatus():
             #OSVR Server not detected. Start OSVR Server and restart the application.
+
+    def endObject():
+        if self._context is not None:
+            #Shutting down OSVR
+            self._context.Dispose()
+            self._context = None
+        super().endObject()

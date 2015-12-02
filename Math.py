@@ -3,14 +3,14 @@ import math
 
 class Math:
     def ConvertPosition(OSVR.ClientKit.Vec3 vec)
-        #Blender uses a right handed coordinate system. But y and z seem to be swapped
+        #Blender uses a right handed coordinate system. But y and z are swapped
         return mathutils.Vector((float)vec.x, (float)vec.y, (float)vec.z)
 
     def ConvertPosition(OSVR.ClientKit.Vec2 vec)
         return mathutils.Vector((float)vec.x, (float)vec.y)
 
     def ConvertOrientation(OSVR.ClientKit.Quaternion quat)
-        # Wikipedia may say quaternions are not handed, but these needed modification. Check if Blender is same
+        # Wikipedia may say quaternions are not handed, but these needed modification in Unity. Check if Blender is same
         return mathutils.Quaternion((float)quat.w, (float)quat.x, (float)quat.y, (float)quat.z)
 
     def ConvertPose(OSVR.ClientKit.Pose3 pose)
