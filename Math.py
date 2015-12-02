@@ -4,31 +4,37 @@ import math
 class Math:
     def ConvertPosition(OSVR.ClientKit.Vec3 vec)
         #Blender uses a right handed coordinate system. But y and z are swapped
-        return mathutils.Vector((float)vec.x, (float)vec.y, (float)vec.z)
+        temp_vec = mathutils.Vector((float)vec.x, (float)vec.y, (float)vec.z)
+        #may need to be -90 degrees
+        rot_mat = mathutils.Matrix.Rotation(math.degrees(90), 4, 'X')
+        return rot_mat * temp_vec
 
-    def ConvertPosition(OSVR.ClientKit.Vec2 vec)
+    def ConvertPosition(OSVR.ClientKit.Vec2 vec):
         return mathutils.Vector((float)vec.x, (float)vec.y)
 
     def ConvertOrientation(OSVR.ClientKit.Quaternion quat)
         # Wikipedia may say quaternions are not handed, but these needed modification in Unity. Check if Blender is same
         return mathutils.Quaternion((float)quat.w, (float)quat.x, (float)quat.y, (float)quat.z)
 
-    def ConvertPose(OSVR.ClientKit.Pose3 pose)
-        matrix4x4 = mathutils.Matrix()
-        matrix_location = mathutils.Matrix.Translation(ConvertPosition(pose.translation))
-        matrix_rotation = mathutils.Matrix.Rotation(ConvertOrientation(pose.rotation))
-        matrix_scale = mathutils.Matrix.Scale(ConvertPosition(Vector3.zero))
+    def ConvertPose(OSVR.ClientKit.Pose3 pose):
+        matrix_location = mathutils.Matrix.Translation(ConvertPosition(pose.translation)).to_4x4()
+        #rotation parameters are angle (float), size (int), axis (string or vector)
+        axis, angle = ConvertOrientation(pose.rotation).to_axis_angle()
+        matrix_rotation = mathutils.Matrix.Rotation(angle, 4, axis).to_4x4()
+        #scale parameters are factor (float), size (int), axis (string or vector)
+        matrix_scale = mathutils.Matrix.Scale(ConvertPosition(Vector3.zero)).to_4x4()
         matrix4x4 = matrix_location * matrix_rotation * matrix_scale
         return matrix4x4
 
     #Convert OSVR.ClientKit.Viewport to Rect. Blender equivalent?
+    # Did some searching, didn't find anything about needing to normalize viewport.
     #Rect ConvertViewport(OSVR.ClientKit.Viewport viewport)
         #Unity expects normalized coordinates, not pixel coordinates. What about Blender?
         #@todo below assumes left and right eyes split the screen in half horizontally
         #return Rect(viewport.Left / (2f*viewport.Width), viewport.Bottom / viewport.Height, viewport.Width/(viewport.Width*2f), 1);
 
     #Convert OSVR.ClientKit.Matrix44f to Matrix4x4
-    def ConvertMatrix(OSVR.ClientKit.Matrix44f matrix)
+    def ConvertMatrix(OSVR.ClientKit.Matrix44f matrix):
         matrix4x4 = mathutils.Matrix()
         matrix4x4[0][0] = matrix.M0
         matrix4x4[1][0] = matrix.M1
