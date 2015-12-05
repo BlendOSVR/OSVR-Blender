@@ -22,7 +22,7 @@ class Math:
         axis, angle = ConvertOrientation(pose.rotation).to_axis_angle()
         matrix_rotation = mathutils.Matrix.Rotation(angle, 4, axis).to_4x4()
         #scale parameters are factor (float), size (int), axis (string or vector)
-        matrix_scale = mathutils.Matrix.Scale(ConvertPosition(Vector3.zero)).to_4x4()
+        matrix_scale = mathutils.Matrix.Scale(ConvertPosition(mathutils.Vector(1,1,1))).to_4x4()
         matrix4x4 = matrix_location * matrix_rotation * matrix_scale
         return matrix4x4
 
