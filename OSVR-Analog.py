@@ -15,9 +15,9 @@ class OSVR_Analog(Operator):
 
     def execute(self, context):                  # execute() is called by blender when running the operator
         obj = context.scene.objects.active
-        bpy.ops.object.game_property_new(type="BOOL",name="analog")
+        bpy.ops.object.game_property_new(type="FLOAT",name="analog")
         prop = obj.game.properties["analog"];
-        prop.value = False
+        prop.value = 0
         bpy.ops.logic.sensor_add("ALWAYS", "OSVR-Analog-Sensor")
         bpy.ops.logic.controller_add(type="PYTHON", name="OSVR-Analog-Controller")
 
