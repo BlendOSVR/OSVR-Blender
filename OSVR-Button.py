@@ -35,5 +35,6 @@ def unregister():
 
 # allows the script to be run directly from blender's text editor
 # without having to install the addon
+
 if __name__ == "__main__":
     register()
