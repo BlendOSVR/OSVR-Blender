@@ -37,23 +37,15 @@ if __name__ == "__main__":
 def updateAnalog():
     import bge
 
-    obj = bpy.context.scene.objects.active
     controller = bge.logic.getCurrentController()       #gets Python Controller associated with this script
-    actuator = controller.actuators["ToggleAnalog"]
-    print(actuator)
-    print(obj.game.properties["analog"].value)
-    # controller.activate(actuator)
+    obj = bpy.data.objects[controller.owner.name]
+    bpy.context.scene.objects.active = obj
     obj.game.properties["analog"].value = not obj.game.properties["analog"].value
-    print(obj.game.properties["analog"].value)
 
 def updateButton():
     import bge
 
-    obj = bpy.context.scene.objects.active
     controller = bge.logic.getCurrentController()       #gets Python Controller associated with this script
-    actuator = controller.actuators["ToggleButton"]
-    print(actuator)
-    print(obj.game.properties["button"].value)
-    # controller.activate(actuator)
+    obj = bpy.data.objects[controller.owner.name]
+    bpy.context.scene.objects.active = obj
     obj.game.properties["button"].value = not obj.game.properties["button"].value
-    print(obj.game.properties["button"].value)
