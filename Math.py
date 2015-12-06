@@ -1,22 +1,23 @@
 import mathutils
 import math
+import osvr.ClientKit
 
 class Math:
-    def ConvertPosition(OSVR.ClientKit.Vec3 vec)
+    def ConvertPosition(vec):
         #Blender uses a right handed coordinate system. But y and z are swapped
-        temp_vec = mathutils.Vector((float)vec.x, (float)vec.y, (float)vec.z)
+        temp_vec = mathutils.Vector(float(vec.data[0]), float(vec.data[1]), float(vec.data[2]))
         #may need to be -90 degrees
         rot_mat = mathutils.Matrix.Rotation(math.degrees(90), 4, 'X')
         return rot_mat * temp_vec
 
-    def ConvertPosition(OSVR.ClientKit.Vec2 vec):
-        return mathutils.Vector((float)vec.x, (float)vec.y)
+    def ConvertPosition(vec):
+        return mathutils.Vector(float(vec.data[0]), float(vec.data[1]))
 
-    def ConvertOrientation(OSVR.ClientKit.Quaternion quat)
+    def ConvertOrientation(quat):
         # Wikipedia may say quaternions are not handed, but these needed modification in Unity. Check if Blender is same
-        return mathutils.Quaternion((float)quat.w, (float)quat.x, (float)quat.y, (float)quat.z)
+        return mathutils.Quaternion(float(quat.data[0]), float(quat.data[1]), float(quat.data[2]), float(quat.data[3]))
 
-    def ConvertPose(OSVR.ClientKit.Pose3 pose):
+    def ConvertPose(pose):
         matrix_location = mathutils.Matrix.Translation(ConvertPosition(pose.translation)).to_4x4()
         #rotation parameters are angle (float), size (int), axis (string or vector)
         axis, angle = ConvertOrientation(pose.rotation).to_axis_angle()
@@ -34,7 +35,7 @@ class Math:
         #return Rect(viewport.Left / (2f*viewport.Width), viewport.Bottom / viewport.Height, viewport.Width/(viewport.Width*2f), 1);
 
     #Convert OSVR.ClientKit.Matrix44f to Matrix4x4
-    def ConvertMatrix(OSVR.ClientKit.Matrix44f matrix):
+    def ConvertMatrix(matrix):
         matrix4x4 = mathutils.Matrix()
         matrix4x4[0][0] = matrix.M0
         matrix4x4[1][0] = matrix.M1

@@ -7,7 +7,7 @@ import bpy
 from bpy.types import Operator
 # from ClientKit import ClientKit
 
-class OSVR_Analog(Operator):
+class OSVR_Position(Operator):
     """OSVR_Position"""                         # blender tooltip for menu items and buttons
     bl_idname = "object.osvr_position"          # unique identifier for buttons and menu items to reference
     bl_label = "OSVR_Position"                  # displays name in the interface

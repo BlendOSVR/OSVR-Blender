@@ -4,7 +4,7 @@ bl_info = {
 }
 
 import bpy
-import osvr.Interface
+import Math
 from bpy.types import Operator
 from ClientKit import ClientKit
 
@@ -50,9 +50,11 @@ def updatePosition():
 
     timestamp, pose = head.getPoseState()
 
+    blendvec = Math.convertPosition(pose.translation)
+
     controller = bge.logic.getCurrentController()
     obj = bpy.data.objects[controller.owner.name]
     bpy.context.scene.objects.active = obj
-    obj.location.x = pose.translation.data[0]
-    obj.location.y = pose.translation.data[1]
-    obj.location.z = pose.translation.data[2]
+    obj.location.x = blendvec.x
+    obj.location.y = blendvec.y
+    obj.location.z = blendvec.z
