@@ -4,6 +4,7 @@ bl_info = {
 }
 
 import bpy
+import osvr.Interface
 from bpy.types import Operator
 from ClientKit import ClientKit
 
@@ -45,17 +46,21 @@ def updateButton():
 def updatePosition():
     from bge.logic import getCurrentController
 
+    head = clientKit.instance.context.getInterface("/me/head")
+
+    timestamp, pose = head.getPoseState()
+
     controller = getCurrentController()
     obj = bpy.data.objects[controller.owner.name]
     bpy.context.scene.objects.active = obj
-    obj.location.x = 0
-    obj.location.y = 0
-    obj.location.z = 0
+    obj.location.x = pose.translation.data[0]
+    obj.location.y = pose.translation.data[1]
+    obj.location.z = pose.translation.data[2]
 
 def updateOrientation():
     from bge.logic import getCurrentController
     import mathutils
-
+    
     controller = getCurrentController()
     obj = controller.owner
     obj.localorientation = mathutils.Matrix()
