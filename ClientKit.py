@@ -24,7 +24,7 @@ class ClientKit:
                     #OSVR ClientKit instance needs AppID set to a reverse-order DNS name! Using dummy name...
                     self.AppID = "com.osvr.osvr-blender.dummy"
                 print("[OSVR] Starting with app ID: " + self.AppID)
-                self._context = osvr.ClientKit.ClientContext(self.AppID, 0);
+                self._context = ClientContext(self.AppID);
 
             # if not self._context.CheckStatus():
                 # print("OSVR Server not detected. Start OSVR Server and restart the application.")

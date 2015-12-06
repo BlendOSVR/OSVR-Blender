@@ -20,6 +20,7 @@ class OSVR(Operator):
         game_settings.stereo_mode = 'SIDEBYSIDE' # change stereo settings to side by side views
         clientKit = ClientKit()
 
+
         return {'FINISHED'}             # lets blender know the operator finished successfully
 
 def register():
@@ -33,27 +34,3 @@ def unregister():
 # without having to install the addon
 if __name__ == "__main__":
     register()
-
-def updateAnalog():
-    import bge
-
-    obj = bpy.context.scene.objects.active
-    controller = bge.logic.getCurrentController()       #gets Python Controller associated with this script
-    actuator = controller.actuators["ToggleAnalog"]
-    print(actuator)
-    print(obj.game.properties["analog"].value)
-    # controller.activate(actuator)
-    obj.game.properties["analog"].value = not obj.game.properties["analog"].value
-    print(obj.game.properties["analog"].value)
-
-def updateButton():
-    import bge
-
-    obj = bpy.context.scene.objects.active
-    controller = bge.logic.getCurrentController()       #gets Python Controller associated with this script
-    actuator = controller.actuators["ToggleButton"]
-    print(actuator)
-    print(obj.game.properties["button"].value)
-    # controller.activate(actuator)
-    obj.game.properties["button"].value = not obj.game.properties["button"].value
-    print(obj.game.properties["button"].value)
