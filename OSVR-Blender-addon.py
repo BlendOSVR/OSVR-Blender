@@ -36,15 +36,15 @@ if __name__ == "__main__":
     register()
 
 def updateButton():
-    import bge
+    from bge.logic import getCurrentController
 
-    controller = bge.logic.getCurrentController()       #gets Python Controller associated with this script
+    controller = getCurrentController()       #gets Python Controller associated with this script
     obj = bpy.data.objects[controller.owner.name]
     bpy.context.scene.objects.active = obj
     obj.game.properties["button"].value = not obj.game.properties["button"].value
 
 def updatePosition():
-    import bge
+    from bge.logic import getCurrentController
 
     head = clientKit.instance.context.getInterface("/me/head")
 
@@ -52,9 +52,17 @@ def updatePosition():
 
     blendvec = Math.convertPosition(pose.translation)
 
-    controller = bge.logic.getCurrentController()
+    controller = getCurrentController()
     obj = bpy.data.objects[controller.owner.name]
     bpy.context.scene.objects.active = obj
     obj.location.x = blendvec.x
     obj.location.y = blendvec.y
     obj.location.z = blendvec.z
+
+def updateOrientation():
+    from bge.logic import getCurrentController
+    import mathutils
+    
+    controller = getCurrentController()
+    obj = controller.owner
+    obj.localorientation = mathutils.Matrix()
