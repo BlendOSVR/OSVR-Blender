@@ -4,22 +4,22 @@ bl_info = {
 }
 
 import bpy
-import Math
+# import Math
 from bpy.types import Operator
-from ClientKit import ClientKit
+# from ClientKit import ClientKit
 
 class OSVR(Operator):
     """OSVR"""                          # blender tooltip for menu items and buttons
     bl_idname = "object.osvr"           # unique identifier for buttons and menu items to reference
     bl_label = "OSVR"                   # displays name in the interface
     bl_options = {'REGISTER', 'UNDO'}    # enable undo for the operator
-    clientKit = None
+    # clientKit = None
 
     def execute(self, context):                  # execute() is called by blender when running the operator
         game_settings = bpy.data.scenes["Scene"].game_settings
         game_settings.stereo = 'STEREO'          # change camera to stereo
         game_settings.stereo_mode = 'SIDEBYSIDE' # change stereo settings to side by side views
-        clientKit = ClientKit()
+        # clientKit = ClientKit()
 
         return {'FINISHED'}             # lets blender know the operator finished successfully
 
@@ -62,7 +62,23 @@ def updatePosition():
 def updateOrientation():
     from bge.logic import getCurrentController
     import mathutils
+    import math
     
     controller = getCurrentController()
     obj = controller.owner
-    obj.localorientation = mathutils.Matrix()
+    obj.orientation = mathutils.Quaternion((50,0,0.7), math.radians(90.0))
+
+def exitOSVR():
+    import bge
+
+    print("Shutting down...")
+    bge.logic.endGame()
+
+def moveObject():
+    from bge.logic import getCurrentController
+
+    controller = getCurrentController()
+    obj = bpy.data.objects[controller.owner.name]
+    bpy.context.scene.objects.active = obj
+
+    obj.location.x += 1

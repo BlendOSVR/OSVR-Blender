@@ -14,11 +14,6 @@ class OSVR_Orientation(Operator):
     bl_options = {'REGISTER', 'UNDO'}           # enable undo for the operator
 
     def execute(self, context):                 # execute() is called by blender when running the operator
-        obj = context.scene.objects.active
-        bpy.ops.object.game_property_new(type="BOOL",name="button")
-        prop = obj.game.properties["button"];
-        prop.value = False
-        obj = context.scene.objects.active
         bpy.ops.logic.sensor_add(type="ALWAYS", name="OSVR-Orientation-Sensor")
         bpy.ops.logic.controller_add(type="PYTHON", name="OSVR-Orientation-Controller")
 
