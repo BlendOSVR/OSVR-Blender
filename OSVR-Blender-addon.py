@@ -21,6 +21,7 @@ class OSVR(Operator):
         game_settings = bpy.data.scenes["Scene"].game_settings
         game_settings.stereo = 'STEREO'          # change camera to stereo
         game_settings.stereo_mode = 'SIDEBYSIDE' # change stereo settings to side by side views
+
         return {'FINISHED'}             # lets blender know the operator finished successfully
 
 def register():
